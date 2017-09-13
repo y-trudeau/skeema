@@ -15,6 +15,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/skeema/mybase"
 	"github.com/skeema/tengo"
+	"github.com/y-trudeau/mysqlgoutils"
 )
 
 // Dir represents a directory that Skeema is interacting with.
@@ -190,7 +191,7 @@ func (dir *Dir) Instances() ([]*tengo.Instance, error) {
 		if host == "localhost" && (socketWasSupplied || !portWasSupplied) {
 			dsn = fmt.Sprintf("%s@unix(%s)/?%s", userAndPass, socketValue, params)
 		} else {
-			splitHost, splitPort, err := tengo.SplitHostOptionalPort(host)
+			splitHost, splitPort, splitSchema, err := mysqlgoutils.SplitHostOptionalPortAndSchema(host)
 			if err != nil {
 				return nil, err
 			}
